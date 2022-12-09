@@ -4,6 +4,7 @@ tmp*
 *.bak
 pipeline*.json
 *_install.sh
-exports*.sh
+exports.sh
 *_CodeReviewReport.html
 *_Extensions.json
+*install64.sh
