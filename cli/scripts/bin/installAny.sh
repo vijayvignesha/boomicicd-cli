@@ -9,7 +9,7 @@ atomName=
 # for shared web URL
 sharedWebURL="https:\/\/url.com"
 apiType=advanced
-apiAuth=${basic}
+apiAuth=basic
 
 # for cloud molecule
 cloudId=

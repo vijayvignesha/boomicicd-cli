@@ -67,7 +67,6 @@ then
 	proxyParams="${proxyParams} -VproxyPassword='${proxyPassword}'"
 fi
 
-printArgs
 
 # fetch token
 source bin/installerToken.sh atomType=${atomUpper} cloudId=${cloudId}

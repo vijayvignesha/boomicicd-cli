@@ -23,7 +23,6 @@ ARGUMENTS=(atomId overrideUrl apiType auth url)
 JSON_FILE=json/updateSharedServer.json
 URL=$baseURL/SharedServerInformation/$atomId/update
 
-printArgs
 
 createJSON
  
