@@ -21,7 +21,7 @@ TMP_DIR=/usr/local/boomi/tmp
 WORK_DIR=/usr/local/boomi/work
 JAVA_HOME=/usr/bin/java
 JRE_HOME=/usr/lib/jvm/jre
-INSTALL_DIR=/usr/local/boomi/
+INSTALL_DIR=/mnt/efs/boomi/
 
 # optional leave blank
 proxyHost=
@@ -32,6 +32,8 @@ proxyPassword=
 
 if [[ "$atomType" = "ATOM" ]]
 	then
+		# install atom on the local drive 
+		INSTALL_DIR=/usr/local/boomi/
 		ATOM_HOME=${INSTALL_DIR}/Atom_${atomName}
 		if [[ -d "${ATOM_HOME}" ]]
 		then
@@ -94,6 +96,9 @@ if [[ "$atomType" = "ATOM" ]]
 		echo "Invalid AtomType"
 		exit 255
 fi
+
+echo "$JRE_HOME" > "${ATOM_HOME}"/.install4j/inst_jre.cfg
+echo "$JRE_HOME" > "${ATOM_HOME}"/.install4j/pref_jre.cfg
 	
 ${ATOM_HOME}/bin/atom restart
 
