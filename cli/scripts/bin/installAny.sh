@@ -37,9 +37,9 @@ if [[ "$atomType" = "ATOM" ]]
 		ATOM_HOME=${INSTALL_DIR}/Atom_${atomName}
 		if [[ -d "${ATOM_HOME}" ]]
 		then
-			echo "${ATOM_HOME}" exits. Will stop installation."
+			echo "${ATOM_HOME} exits. Will stop installation."
 			exit 0
-                fi
+        fi
 			
 		source bin/installerToken.sh atomType=${atomType}
 		./bin/installAtom.sh atomName="${atomName}" tokenId="${tokenId}" INSTALL_DIR="${INSTALL_DIR}" JRE_HOME="${JRE_HOME}" JAVA_HOME="${JAVA_HOME}" proxyHost="${proxyHost}" proxyPort="${proxyPort}" proxyUser="${proxyUser}" proxyPassword="${proxyPassword}"
@@ -51,9 +51,10 @@ if [[ "$atomType" = "ATOM" ]]
 		ATOM_HOME=${INSTALL_DIR}/Cloud_${atomName}
 		if [[ -d "${ATOM_HOME}" ]]
 		then
-			echo "${ATOM_HOME}" exits. Will stop installation."
+			echo "${ATOM_HOME} exits. Will stop installation."
 			exit 0
-                fi
+        fi
+		
 		source bin/installerToken.sh atomType=${atomType} cloudId=$cloudId
 		./bin/installCloud.sh atomName="${atomName}" tokenId="${tokenId}" INSTALL_DIR="${INSTALL_DIR}" WORK_DIR="${WORK_DIR}" TMP_DIR="${TMP_DIR}" JRE_HOME="${JRE_HOME}" JAVA_HOME="${JAVA_HOME}" proxyHost="${proxyHost}" proxyPort="${proxyPort}" proxyUser="${proxyUser}" proxyPassword="${proxyPassword}"
 		source bin/updateSharedServer.sh atomName="${atomName}" overrideUrl=true url="${sharedWebURL}" apiType="${apiType}" auth="${apiAuth}"		
@@ -63,9 +64,10 @@ if [[ "$atomType" = "ATOM" ]]
 		ATOM_HOME=${INSTALL_DIR}/Broker_${atomName}
 		if [[ -d "${ATOM_HOME}" ]]
 		then
-			echo "${ATOM_HOME}" exits. Will stop installation."
+			echo "${ATOM_HOME} exits. Will stop installation."
 			exit 0
-                fi
+        fi
+		
 		source bin/installerToken.sh atomType=${atomType}
 		./bin/installBroker.sh atomName="${atomName}" tokenId="${tokenId}" INSTALL_DIR="${INSTALL_DIR}" WORK_DIR="${WORK_DIR}" TMP_DIR="${TMP_DIR}" JRE_HOME="${JRE_HOME}" JAVA_HOME="${JAVA_HOME}" proxyHost="${proxyHost}" proxyPort="${proxyPort}" proxyUser="${proxyUser}" proxyPassword="${proxyPassword}"
 		
@@ -74,9 +76,10 @@ if [[ "$atomType" = "ATOM" ]]
 		ATOM_HOME=${INSTALL_DIR}/Gateway_${atomName}
 		if [[ -d "${ATOM_HOME}" ]]
 		then
-			echo "${ATOM_HOME}" exits. Will stop installation."
+			echo "${ATOM_HOME} exits. Will stop installation."
 			exit 0
-                fi
+        fi
+		
 		source bin/installerToken.sh atomType=${atomType}
 		./bin/installGateway.sh atomName="${atomName}" tokenId="${tokenId}" INSTALL_DIR="${INSTALL_DIR}" WORK_DIR="${WORK_DIR}" TMP_DIR="${TMP_DIR}" JRE_HOME="${JRE_HOME}" JAVA_HOME="${JAVA_HOME}" proxyHost="${proxyHost}" proxyPort="${proxyPort}" proxyUser="${proxyUser}" proxyPassword="${proxyPassword}"
 
@@ -85,9 +88,10 @@ if [[ "$atomType" = "ATOM" ]]
 		ATOM_HOME=${INSTALL_DIR}/Molecule_${atomName}
 		if [[ -d "${ATOM_HOME}" ]]
 		then
-			echo "${ATOM_HOME}" exits. Will stop installation."
+			echo "${ATOM_HOME} exits. Will stop installation."
 			exit 0
-                fi
+        fi
+
 		source bin/installerToken.sh atomType=${atomType}
 		./bin/installMolecule.sh atomName="${atomName}" tokenId="${tokenId}" INSTALL_DIR="${INSTALL_DIR}" WORK_DIR="${WORK_DIR}" TMP_DIR="${TMP_DIR}" JRE_HOME="${JRE_HOME}" JAVA_HOME="${JAVA_HOME}" proxyHost="${proxyHost}" proxyPort="${proxyPort}" proxyUser="${proxyUser}" proxyPassword="${proxyPassword}"
 		source bin/createEnvAndAttachRoleAndAtom.sh env="${env}" classification=${classification} atomName="${atomName}" roleName="${roleName}" purgeHistoryDays="${purgeHistoryDays}" 
@@ -101,5 +105,3 @@ echo "$JRE_HOME" > "${ATOM_HOME}"/.install4j/inst_jre.cfg
 echo "$JRE_HOME" > "${ATOM_HOME}"/.install4j/pref_jre.cfg
 	
 ${ATOM_HOME}/bin/atom restart
-
-
