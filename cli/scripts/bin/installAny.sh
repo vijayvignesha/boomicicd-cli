@@ -14,9 +14,12 @@ apiAuth=basic
 # for cloud molecule
 cloudId=
 
+maxMem=4g
 
+# 5 mins = 300000ms
+forceRestartMillisec=300000
 roleName=Administrator
-purgeHistoryDays=1
+purgeHistoryDays=14
 TMP_DIR=/usr/local/boomi/tmp
 WORK_DIR=/usr/local/boomi/work
 JAVA_HOME=/usr/bin/java
@@ -103,5 +106,11 @@ fi
 
 echo "$JRE_HOME" > "${ATOM_HOME}"/.install4j/inst_jre.cfg
 echo "$JRE_HOME" > "${ATOM_HOME}"/.install4j/pref_jre.cfg
+sed -i "s/-Xmx.*$/-Xmx${maxMem}/" "$ATOM_HOME/bin/atom.vmoptions"
+echo "-XX:+UseG1GC" >> "$ATOM_HOME/bin/atom.vmoptions"
+echo "-XX:+ParallelRefProcEnabled" >> "$ATOM_HOME/bin/atom.vmoptions"
+echo "-XX:+UseStringDeduplication" >> "$ATOM_HOME/bin/atom.vmoptions"
+
+sed -i "s/com\.boomi\.container\.purgeDays.*$/com\.boomi\.container\.purgeDays=${purgeHistoryDays}/" "$ATOM_HOME/conf/container.properties"
 	
 ${ATOM_HOME}/bin/atom restart
