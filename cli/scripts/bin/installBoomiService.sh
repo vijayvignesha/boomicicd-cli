@@ -1,21 +1,21 @@
 #!/bin/bash
 
 source bin/common.sh
-ARGUMENTS=(atomName serviceUserName ATOM_HOME EFS_MOUNT)
+ARGUMENTS=(atomName serviceUserName atomHome mountPoint)
 inputs "$@"
 echo "create $atomName.service ..."
 cat <<EOF >/etc/systemd/system/$atomName.service
 [Unit]
 Description= Boomi $atomName
 After=network.target
-RequiresMountsFor="${EFS_MOUNT}"
+RequiresMountsFor="${mountPoint}"
 [Service]
 Type=forking
 User=$serviceUserName
 Restart=always
-ExecStart="${ATOM_HOME}"/bin/atom start
-ExecStop="${ATOM_HOME}"/bin/atom stop
-ExecReload="${ATOM_HOME}"/bin/atom restart
+ExecStart="${atomHome}/bin/atom" start
+ExecStop="${atomHome}/bin/atom" stop
+ExecReload="${atomHome}/bin/atom" restart
 [Install]
 WantedBy=multi-user.target
 EOF

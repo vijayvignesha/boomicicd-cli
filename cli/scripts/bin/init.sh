@@ -109,5 +109,5 @@ then
 fi
 
 source bin/installBoomi.sh
-source bin/installBoomiService.sh
+sudo bin/installBoomiService.sh atomName=${atomName} atomHome=${ATOM_HOME} serviceUserName=${serviceUserName} mountPoint=${mountPoint}
 

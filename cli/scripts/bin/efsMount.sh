@@ -36,5 +36,5 @@ sudo chown -R $serviceUserName "${mountPoint}"
 sudo chown -R $groupName "${mountPoint}"
 
 ## update fstab
-echo "${efsMount}.efs.${defaultAWSRegion}.amazonaws.com:/ /path/to/mount/dir nfs4 defaults,_netdev 0 0" | sudo tee -a /etc/fstab
+echo "${efsMount}.efs.${defaultAWSRegion}.amazonaws.com:/ $mountPoint nfs4 defaults,_netdev 0 0" | sudo tee -a /etc/fstab
 sudo mount -a
