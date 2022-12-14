@@ -85,7 +85,7 @@ fi
 
 if [ -z "${sharedWebURL}" ]
 then
-     export sharedWebURL=https:\/\/[update].com 
+     export sharedWebURL=https:\/\/not-set.com 
 fi
 
 if [ -z "${classification}" ]
