@@ -25,7 +25,7 @@ export baseURL=https://api.boomi.com/api/rest/v1/$accountId
 
 if [ -z "${installDir}" ]
 then
-      export installDir=/opt/boomi 
+      export installDir=/mnt/boomi 
 fi
 
 if [ -z "${workDir}" ]
@@ -85,7 +85,7 @@ fi
 
 if [ -z "${sharedWebURL}" ]
 then
-     export sharedWebURL=https:\/\/not-set.com 
+     export sharedWebURL="https:\/\/not-set\.com"
 fi
 
 if [ -z "${classification}" ]
