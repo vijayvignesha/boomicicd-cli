@@ -108,6 +108,21 @@ then
        return 255;
 fi
 
-source bin/installBoomi.sh
-sudo bin/installBoomiService.sh atomName=${atomName} atomHome=${ATOM_HOME} serviceUserName=${serviceUserName} mountPoint=${mountPoint}
+if [ "$atomType" = "ATOM" ];
+then
+        export ATOM_HOME="${installDir}/Atom_${atomName}"
+elif [ "$atomType" = "MOLECULE" ];
+then
+        export ATOM_HOME="${installDir}/Molecule_${atomName}"
+elif [ "$atomType" = "CLOUD" ];
+then
+        export ATOM_HOME="${installDir}/Cloud_${atomName}"
+fi
 
+# install Boomi only if the atom binaries are not installed
+if [[ ! -f ${ATOM_HOME}/bin/atom ]]
+then
+        source bin/installBoomi.sh
+fi
+
+sudo bin/installBoomiService.sh atomName=${atomName} atomHome=${ATOM_HOME} serviceUserName=${serviceUserName} mountPoint="{mountPoint}"

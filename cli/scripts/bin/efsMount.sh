@@ -3,7 +3,7 @@
 source bin/common.sh
 ARGUMENTS=(efsMount)
 OPT_ARGUMENTS=(mountPoint serviceUserName groupName defaultAWSRegion)
-
+authToken="BOOMI_TOKEN."
 inputs "$@"
 
 if [ "$?" -gt "0" ]

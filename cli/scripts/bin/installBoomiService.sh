@@ -2,6 +2,7 @@
 
 source bin/common.sh
 ARGUMENTS=(atomName serviceUserName atomHome mountPoint)
+authToken="BOOMI_TOKEN."
 inputs "$@"
 echo "create $atomName.service ..."
 cat <<EOF >/etc/systemd/system/$atomName.service
