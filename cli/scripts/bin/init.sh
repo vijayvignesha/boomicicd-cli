@@ -100,7 +100,7 @@ fi
 
 if [ -z "${mountPoint}" ]
 then
-     export mountPoint="/mnt/efs" # Env classification TEST, PRODD 
+     export mountPoint="/mnt/boomi" # Env classification TEST, PRODD 
 fi
 
 if [ "$?" -gt "0" ]

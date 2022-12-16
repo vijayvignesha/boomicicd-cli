@@ -13,7 +13,7 @@ fi
 
 
 if [[ -z "${mountPoint}" ]]; then
-	mountPoint="/mnt/efs";
+	mountPoint="/mnt/boomi";
 fi
 
 if [[ -z "${serviceUserName}" ]]; then

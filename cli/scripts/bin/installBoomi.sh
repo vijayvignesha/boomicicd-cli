@@ -75,7 +75,7 @@ if [[ "$atomType" = "ATOM" ]]
 		echo "Invalid AtomType"
 		exit 255
 fi
-export ${ATOM_HOME}="${ATOM_HOME}"
+export ATOM_HOME="${ATOM_HOME}"
 echo "$JRE_HOME" > "${ATOM_HOME}"/.install4j/inst_jre.cfg
 echo "$JRE_HOME" > "${ATOM_HOME}"/.install4j/pref_jre.cfg
 sed -i "s/-Xmx.*$/-Xmx${maxMem}/" "$ATOM_HOME/bin/atom.vmoptions"
