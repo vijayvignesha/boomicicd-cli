@@ -120,6 +120,7 @@ function clean {
 # call platform API
 function callAPI {
 	unset ERROR ERROR_MESSAGE
+
 	if [ ! -z ${SLEEP_TIMER} ]; then sleep ${SLEEP_TIMER}; fi
   if [[ $URL != *queryMore* ]]
   then
