@@ -15,7 +15,7 @@ then
 fi
 
 # default get 60 mins of history
-export TZ='America/New_York'
+export TZ='UTC'
 now=`date +"%Y-%m-%d"T%H:%M:%SZ --date '+2 min'`
 lag=`date +"%Y-%m-%d"T%H:%M:%SZ --date '-60 min'`
 
@@ -34,15 +34,16 @@ then
 	export processName="%%"
 fi
 
+# default status to fetch is ERROR to prevent overload
 if [ -z "${status}" ]
 then
-	export status="%%"
+	export status="ERROR" 
 fi
 
 
 h=0;
 REPORT_TITLE="Summary of process executions between $from and $to."
-REPORT_HEADERS=("#" "Process Name" "Atom Name" "Duration(s)" "Status" "Message")
+REPORT_HEADERS=("#" "Atom Name" "Process Name" "Execution Type" "Execution Time" "Duration(s)" "Status" "Message")
 printReportHead
 
 IFS=',' ; for _atomName in $(echo "$atomNames");
@@ -76,11 +77,13 @@ do
   		extractMap executionDuration[1] durations	
 		extractMap status statuses
 		extractMap message messages
+		extractMap executionTime times
+		extractMap executionType types
 		while [ "$i" -lt "${#durations[@]}" ];
 		do 
 			h=$(( $h + 1 ))
 			time=${durations[$i]};
-			printReportRow  "${h}" "${processNames[$i]}" "${atomNames[$i]}" "$((time / 1000))" "${statuses[$i]}" "${messages[$i]}"
+			printReportRow  "${h}" "${atomNames[$i]}" "${processNames[$i]}" "${types[$i]}" "${times[$i]}" "$((time / 1000))" "${statuses[$i]}" "${messages[$i]}"
 			i=$(( $i + 1 )); 
   		done
 		extract queryToken queryToken 

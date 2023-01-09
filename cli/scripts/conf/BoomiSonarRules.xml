@@ -256,5 +256,51 @@
             </parameter>
          </parameters>
       </rule>
+      <rule>
+         <repositoryKey>xml</repositoryKey>
+         <key>FlowControlBatchCount</key>
+         <type>BUG</type>
+         <priority>MAJOR</priority>
+         <name>Flow Control Batch Count</name>
+         <templateKey>XPathCheck</templateKey>
+         <description>Flow control process does not batch documents. This will lead to poor performance</description>
+         <parameters>
+            <parameter>
+               <key>filePattern</key>
+               <value>**/**.xml</value>
+            </parameter>
+            <parameter>
+               <key>expression</key>
+               <value>/Component/object/process/shapes/shape/configuration/flowcontrol[@forEachCount &lt; 2]</value>
+            </parameter>
+            <parameter>
+               <key>message</key>
+               <value>Do not set the flow control documents to no batching</value>
+            </parameter>
+         </parameters>
+      </rule>
+      <rule>
+         <repositoryKey>xml</repositoryKey>
+         <key>FlowControlThreadCount</key>
+         <type>BUG</type>
+         <priority>MAJOR</priority>
+         <name>Flow Control Thread Count</name>
+         <templateKey>XPathCheck</templateKey>
+         <description>Flow control process is not multi-threaded. This will lead to poor performance</description>
+         <parameters>
+            <parameter>
+               <key>filePattern</key>
+               <value>**/**.xml</value>
+            </parameter>
+            <parameter>
+               <key>expression</key>
+               <value>/Component/object/process/shapes/shape/configuration/flowcontrol[@chunks &lt; 2]</value>
+            </parameter>
+            <parameter>
+               <key>message</key>
+               <value>Do not set the flow control threads to 0 or 1</value>
+            </parameter>
+         </parameters>
+      </rule>
    </rules>
 </profile>
