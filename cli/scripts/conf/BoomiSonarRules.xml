@@ -302,5 +302,51 @@
             </parameter>
          </parameters>
       </rule>
+       <rule>
+         <repositoryKey>xml</repositoryKey>
+         <key>TryCatchRetries</key>
+         <type>BUG</type>
+         <priority>MAJOR</priority>
+         <name>Try Catch Retries</name>
+         <templateKey>XPathCheck</templateKey>
+         <description>There are no retries in try-catch loops</description>
+         <parameters>
+            <parameter>
+               <key>filePattern</key>
+               <value>**/**.xml</value>
+            </parameter>
+            <parameter>
+               <key>expression</key>
+               <value>/Component/object/process/shapes/shape[@shapetype='catcherrors']/configuration/catcherrors[@retryCount='0']</value>
+            </parameter>
+            <parameter>
+               <key>message</key>
+               <value>Consider adding retries before connector calls</value>
+            </parameter>
+         </parameters>
+      </rule>
+      <rule>
+         <repositoryKey>xml</repositoryKey>
+         <key>TryCatchExceptionTypes</key>
+         <type>BUG</type>
+         <priority>MAJOR</priority>
+         <name>Try Catch Exception Type</name>
+         <templateKey>XPathCheck</templateKey>
+         <description>Try Catch Loop catches only document errors and not all errors</description>
+         <parameters>
+            <parameter>
+               <key>filePattern</key>
+               <value>**/**.xml</value>
+            </parameter>
+            <parameter>
+               <key>expression</key>
+               <value>/Component/object/process/shapes/shape[@shapetype='catcherrors']/configuration/catcherrors[@catchAll='false']</value>
+            </parameter>
+            <parameter>
+               <key>message</key>
+               <value>Include all errors to handle in try-catch block</value>
+            </parameter>
+         </parameters>
+      </rule>
    </rules>
 </profile>
