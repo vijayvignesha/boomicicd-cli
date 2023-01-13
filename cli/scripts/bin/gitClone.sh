@@ -15,6 +15,8 @@ fi
 
 git config --global user.email "${gitComponentUserEmail}"
 git config --global user.name  "${gitComponentUserName}"
+git config --global --add safe.directory "*"
+
 
 
 git clone "${gitComponentRepoURL}"
