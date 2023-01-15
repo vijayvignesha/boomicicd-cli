@@ -10,8 +10,8 @@ export WORKSPACE=`pwd`
 # Example to retrieve form an AWS store "$(aws ssm get-parameter --region xx --with-decryption --output text --query Parameter.Value --name /Parameter.name)
 
 export accountName=""
-export accountId=""
-export authToken=""
+#export accountId=""
+#export authToken=""
 export regressionTestAuthToken=""
 export gitComponentRepoURL=""
 export gitComponentUserName=""

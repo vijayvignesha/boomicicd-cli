@@ -6,7 +6,7 @@ unset VERBOSE
 unset ERROR
 # mandatory arguments
 ARGUMENTS=(atomNames)
-OPT_ARGUMENTS=(processName from to status message)
+OPT_ARGUMENTS=(from to)
 inputs "$@"
 
 if [ "$?" -gt "0" ]
@@ -29,10 +29,6 @@ then
 	export from=$lag
 fi
 
-if [ -z "${processName}" ]
-then
-	export processName="%%"
-fi
 
 # default status to fetch is ERROR to prevent overload
 if [ -z "${status}" ]
@@ -42,24 +38,18 @@ fi
 
 
 h=0;
-REPORT_TITLE="Summary of process executions between $from and $to."
-REPORT_HEADERS=("#" "Atom Name" "Process Name" "Execution Type" "Execution Time" "Execution ID" "Duration(s)" "Status" "Message")
+REPORT_TITLE="Audit Report  between $from and $to."
+REPORT_HEADERS=("#" "Atom Name" "User Id" "Message" "Date" "Type" "Action" "Modifier" "level" "Source" "AuditLog" )
 printReportHead
 
 IFS=',' ; for _atomName in $(echo "$atomNames");
 do
 	# get atomId from atomName
 	source bin/queryAtom.sh atomName="${_atomName}"
-	URL=$baseURL/ExecutionRecord/query
-	JSON_FILE=json/publishExecutionRecordWithMessage.json
+	URL=$baseURL/AuditLog/query
+	JSON_FILE=json/queryAuditLog.json
 
-	if [ -z "${message}" ]
-	then
-       		export message="%%"
-       		JSON_FILE=json/publishExecutionRecord.json
-	fi
-	
-	ARGUMENTS=(atomId to from processName status message)
+	ARGUMENTS=(atomId to from)
 	createJSON
 	queryToken="new"
 
@@ -72,19 +62,20 @@ do
   		break;
 		fi
 		i=0;
-  		extractMap processName processNames	
-  		extractMap atomName    atomNames	
-  		extractMap executionDuration[1] durations	
-		extractMap status statuses
+  		extractMap userId userIds	
 		extractMap message messages
-		extractMap executionTime times
-		extractMap executionId eIds
-		extractMap executionType types
-		while [ "$i" -lt "${#durations[@]}" ];
+  		extractMap date   dates	
+		extractMap type types
+		extractMap action actions
+  		extractMap modifier modifiers	
+  		extractMap level levels	
+  		extractMap source sources	
+		while [ "$i" -lt "${#userIds[@]}" ];
 		do 
 			h=$(( $h + 1 ))
 			time=${durations[$i]};
-			printReportRow  "${h}" "${atomNames[$i]}" "${processNames[$i]}" "${types[$i]}" "${times[$i]}" "${eIds[$i]}" "$((time / 1000))" "${statuses[$i]}" "${messages[$i]}"
+			auditLog=$(jq -r --arg index $i '.result[$index | tonumber].AuditLogProperty[] | [.name,.value] | join(": ") | tostring + "|"' "${WORKSPACE}/out.json" | sed -e 's/</\&lt;/g'  -e 's/>/\&gt;/g' -e 's/|/<br\/>/g' | grep -v SESSION_ID)
+			printReportRow  "${h}" "${_atomName}" "${userIds[$i]}" "${messages[$i]}" "${dates[$i]}" "${types[$i]}" "${actions[$i]}" "${modifiers[$i]}" "${levels[$i]}" "${sources[$i]}" "${auditLog}" 
 			i=$(( $i + 1 )); 
   		done
 		extract queryToken queryToken 
@@ -94,3 +85,8 @@ done
 printReportTail
 clean
 export VERBOSE=${saveVerbose}
+
+if [ "$ERROR" -gt "0" ]
+then
+   return 255;
+fi

@@ -208,7 +208,11 @@ function extract {
 }
 
 function extractMap {
- mapfile -t ${2} < <(jq -r .result[].${1} "${WORKSPACE}/out.json")
+ records=$(jq -r .numberOfResults "${WORKSPACE}/out.json")
+ if [ "${records}" -gt  "0" ]
+ then	 
+	mapfile -t ${2} < <(jq -r .result[].${1} "${WORKSPACE}/out.json")
+ fi
 }
 
 function extractComponentMap {

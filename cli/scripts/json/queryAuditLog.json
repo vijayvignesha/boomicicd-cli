@@ -1,0 +1,23 @@
+{
+  "QueryFilter" :
+    {
+      "expression" :
+        {
+		"operator" : "and",
+		"nestedExpression" : [
+		{
+			"argument" : ["${atomId}"],
+			"operator" : "EQUALS",
+			"property" : "containerId"
+                },
+		{
+			"argument" : ["${from}", "${to}"],
+			"operator" : "BETWEEN",
+			"property" : "date"
+		}]
+      }
+   }
+}   
+
+
+
