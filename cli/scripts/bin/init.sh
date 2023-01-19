@@ -117,6 +117,9 @@ then
 elif [ "$atomType" = "CLOUD" ];
 then
         export ATOM_HOME="${installDir}/Cloud_${atomName}"
+elif [ "$atomType" = "GATEWAY" ];
+then
+        export ATOM_HOME="${installDir}/Gateway_${atomName}"
 fi
 
 # install Boomi only if the atom binaries are not installed
