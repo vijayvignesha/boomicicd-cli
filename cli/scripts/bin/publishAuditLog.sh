@@ -74,7 +74,7 @@ do
 		do 
 			h=$(( $h + 1 ))
 			time=${durations[$i]};
-			auditLog=$(jq -r --arg index $i '.result[$index | tonumber].AuditLogProperty[] | [.name,.value] | join(": ") | tostring + "|"' "${WORKSPACE}/out.json" | sed -e 's/</\&lt;/g'  -e 's/>/\&gt;/g' -e 's/|/<br\/>/g' | grep -v SESSION_ID)
+			auditLog=$(jq -r --arg index $i '.result[$index | tonumber].AuditLogProperty[] | select(.name != "SESSION_ID") | [.name,.value] | join(": ") | tostring + "|"' "${WORKSPACE}/out.json" | sed -e 's/</\&lt;/g'  -e 's/>/\&gt;/g' -e 's/|/<br\/>/g')
 			printReportRow  "${h}" "${_atomName}" "${userIds[$i]}" "${messages[$i]}" "${dates[$i]}" "${types[$i]}" "${actions[$i]}" "${modifiers[$i]}" "${levels[$i]}" "${sources[$i]}" "${auditLog}" 
 			i=$(( $i + 1 )); 
   		done
