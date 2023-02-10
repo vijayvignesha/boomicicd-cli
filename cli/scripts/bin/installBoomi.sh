@@ -5,7 +5,7 @@ JRE_HOME="${jreHome}"
 JAVA_HOME="${javaHome}"
 TMP_DIR="${tmpDir}"
 WORK_DIR="${workDir}"
-
+unset ATOM_HOME
 if [[ "$atomType" = "ATOM" ]]
 	then
 		# install atom on the local drive 
@@ -18,8 +18,9 @@ if [[ "$atomType" = "ATOM" ]]
 			
 		source bin/installerToken.sh atomType=${atomType}
 		./bin/installAtom.sh atomName="${atomName}" tokenId="${tokenId}" INSTALL_DIR="${INSTALL_DIR}" JRE_HOME="${JRE_HOME}" JAVA_HOME="${JAVA_HOME}" proxyHost="${proxyHost}" proxyPort="${proxyPort}" proxyUser="${proxyUser}" proxyPassword="${proxyPassword}"
-		source bin/createEnvAndAttachRoleAndAtom.sh env="${env}" classification=${classification} atomName="${atomName}" roleName="${roleName}" purgeHistoryDays="${purgeHistoryDays}" 
+		source bin/createEnvAndAttachRoleAndAtom.sh env="${env}" classification=${classification} atomName="${atomName}" roleNames="${roleNames}" purgeHistoryDays="${purgeHistoryDays}" forceRestartTime="${forceRestartMin}"
 		source bin/updateSharedServer.sh atomName="${atomName}" overrideUrl=true url="${sharedWebURL}" apiType="${apiType}" auth="${apiAuth}"
+		input="conf/atom_container.properties"
 
 	elif [[ "$atomType" = "CLOUD" ]]
 	then
@@ -69,22 +70,26 @@ if [[ "$atomType" = "ATOM" ]]
 
 		source bin/installerToken.sh atomType=${atomType}
 		./bin/installMolecule.sh atomName="${atomName}" tokenId="${tokenId}" INSTALL_DIR="${INSTALL_DIR}" WORK_DIR="${WORK_DIR}" TMP_DIR="${TMP_DIR}" JRE_HOME="${JRE_HOME}" JAVA_HOME="${JAVA_HOME}" proxyHost="${proxyHost}" proxyPort="${proxyPort}" proxyUser="${proxyUser}" proxyPassword="${proxyPassword}"
-		source bin/createEnvAndAttachRoleAndAtom.sh env="${env}" classification=${classification} atomName="${atomName}" roleName="${roleName}" purgeHistoryDays="${purgeHistoryDays}" 
+		source bin/createEnvAndAttachRoleAndAtom.sh env="${env}" classification=${classification} atomName="${atomName}" roleNames="${roleNames}" purgeHistoryDays="${purgeHistoryDays}" forceRestartTime="${forceRestartMin}"
 		source bin/updateSharedServer.sh atomName="${atomName}" overrideUrl=true url="${sharedWebURL}" apiType="${apiType}" auth="${apiAuth}"
+		input="conf/molecule_container.properties"
 	else
 		echo "Invalid AtomType"
 		exit 255
 fi
-export ATOM_HOME="${ATOM_HOME}"
+${ATOM_HOME}/bin/atom stop
+
 echo "$JRE_HOME" > "${ATOM_HOME}"/.install4j/inst_jre.cfg
 echo "$JRE_HOME" > "${ATOM_HOME}"/.install4j/pref_jre.cfg
 sed -i "s/-Xmx.*$/-Xmx${maxMem}/" "$ATOM_HOME/bin/atom.vmoptions"
 
+echoi "Purgehistory days $purgeHistoryDays." 
 # append additional atom JAVA options
 cat <<EOF >>${ATOM_HOME}/bin/atom.vmoptions
 -XX:+UseG1GC
 -XX:+ParallelRefProcEnabled
 -XX:+UseStringDeduplication
+-XX:+HeapDumpOnOutOfMemoryError
 -Dcom.sun.management.jmxremote.authenticate=false
 -Dcom.sun.management.jmxremote.ssl=false
 -Dcom.sun.management.jmxremote.local.only=false
@@ -94,7 +99,9 @@ cat <<EOF >>${ATOM_HOME}/bin/atom.vmoptions
 -Dcom.sun.management.jmxremote.access.file=/etc/jmxremote/jmxremote.access
 EOF
 
-sed -i "s/com\.boomi\.container\.purgeDays.*$/com\.boomi\.container\.purgeDays=${purgeHistoryDays}/" "$ATOM_HOME/conf/container.properties"
-sed -i "s/com\.boomi\.container\.forceRestart.*$/com\.boomi\.container\.forceRestart=${forceRestartMillisec}/" "$ATOM_HOME/conf/container.properties"
+
+# update container properties
+while IFS= read -r line; do echo "$line" >> ${ATOM_HOME}/conf/container.properties; done  < "$input"
+
 	
-${ATOM_HOME}/bin/atom restart
+${ATOM_HOME}/bin/atom start

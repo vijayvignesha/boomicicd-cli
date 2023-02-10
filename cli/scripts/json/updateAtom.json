@@ -1,4 +1,5 @@
 {
   "id" : "${atomId}",
-  "purgeHistoryDays" : "${purgeHistoryDays}"
+  "purgeHistoryDays" : "${purgeHistoryDays}",
+  "forceRestartTime" : "${forceRestartTime}"
 }

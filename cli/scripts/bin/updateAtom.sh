@@ -3,7 +3,7 @@ source bin/common.sh
 
 # get atom id of the by atom name
 # mandatory arguments
-ARGUMENTS=(atomId purgeHistoryDays)
+ARGUMENTS=(atomId purgeHistoryDays forceRestartTime)
 JSON_FILE=json/updateAtom.json
 exportVariable=updatedAtomId
 id=id

@@ -3,9 +3,9 @@
 source bin/common.sh
 # get atom id of the by atom name
 # mandatory arguments
-
-ARGUMENTS=(atomName env accountId)
-OPT_ARGUMENTS=(proxyHost proxyPort proxyUser proxyPassword installDir workDir tmpDir javaHome jreHome atomType purgeHistoryDays roleName forceRestartMillisec maxMem apiType apiAuth sharedWebURL classification serviceUserName mountPoint)
+unset atomType ATOM_HOME
+ARGUMENTS=(atomName env accountId classification)
+OPT_ARGUMENTS=(proxyHost proxyPort proxyUser proxyPassword installDir workDir tmpDir javaHome jreHome atomType purgeHistoryDays roleNames forceRestartMin maxMem apiType apiAuth sharedWebURL serviceUserName mountPoint)
 
 inputs "$@"
 
@@ -58,14 +58,14 @@ then
      export purgeHistoryDays="14"  
 fi
 
-if [ -z "${roleName}" ]
+if [ -z "${roleNames}" ]
 then
-     export roleName="Administrator" 
+     export roleNames="Administrator, Support, Production Support" 
 fi
 
-if [ -z "${forceRestartMillisec}" ]
+if [ -z "${forceRestartMin}" ]
 then
-   export forceRestartMillisec=300000	
+   export forceRestartMin=10	
 fi
 
 if [ -z "${maxMex}" ]
@@ -88,11 +88,6 @@ then
      export sharedWebURL="https:\/\/not-set\.com"
 fi
 
-if [ -z "${classification}" ]
-then
-     export classification="TEST" # Env classification TEST, PRODD 
-fi
-
 if [ -z "${serviceUserName}" ]
 then
      export serviceUserName="boomi"  
@@ -107,6 +102,8 @@ if [ "$?" -gt "0" ]
 then
        return 255;
 fi
+
+atomName="$(echo "${atomName}" | sed -e 's/-/_/g')"
 
 if [ "$atomType" = "ATOM" ];
 then
@@ -126,6 +123,8 @@ fi
 if [[ ! -f ${ATOM_HOME}/bin/atom ]]
 then
         source bin/installBoomi.sh
+else
+	echo "Atom is already installed at $ATOM_HOME, will install only the start up service"	
 fi
 
 sudo bin/installBoomiService.sh atomName=${atomName} atomHome=${ATOM_HOME} serviceUserName=${serviceUserName} mountPoint="${mountPoint}"
