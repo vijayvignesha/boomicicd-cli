@@ -2,6 +2,7 @@
 source bin/common.sh
 
 unset _saveComponentId _saveComponentType _saveComponentName _saveComponentVersion exportVariable
+unset componentId componentName
 # mandatory arguments
 OPT_ARGUMENTS=(componentType componentName componentId deleted currentVersion componentVersion)
 ARGUMENTS=()
@@ -21,6 +22,7 @@ else
 	unset ERROR_MESSAGE ERROR
 fi
    
+export componentName="$(echo $componentName |  sed 's/\//\\\//g')"
 # set defaults
 if [ -z "${currentVersion}" ] 
 then
