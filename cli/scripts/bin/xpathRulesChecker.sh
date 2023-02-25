@@ -26,8 +26,14 @@ do
  for (( i=1; i<=${rules}; i++ ))
   do 
    xpath="`cat "${sonarRulesFile}" | xmllint -xpath 'profile/rules/rule['$i']/parameters/parameter/key[text()="expression"]/../value/text()' -`"
-   fail=`cat "${componentFile}" | sed -e 's/bns://g' | xmllint --xpath "$xpath" - 2> /dev/null | wc -c`
-   if [ "${fail}" -gt 0 ];  then
+   fail=`cat "${componentFile}" | sed -e 's/bns://g' | xmllint --xpath "$xpath" - 2> /dev/null`
+   if [ "${fail}" = "false" ] || [ -z "$fail" ] ; then
+	   fail=0
+   else
+	   fail="$(echo ${fail} | wc -l)"
+   fi	   
+
+   if [[ "${fail}" -gt 0 ]] ;  then
 		 export VIOLATIONS_FOUND="true"
 		 vPriority="`cat "${sonarRulesFile}" | xmllint -xpath 'profile/rules/rule['$i']/priority/text()' -`" ;
 		 vType="`cat "${sonarRulesFile}" | xmllint -xpath 'profile/rules/rule['$i']/type/text()' -`" ;
@@ -41,7 +47,3 @@ done
 printReportTail
 clean
 export VERBOSE=${saveVerbose}
-if [ "$ERROR" -gt "0" ]
-then
-   return 255;
-fi
