@@ -371,5 +371,28 @@
         </parameter>
       </parameters>
     </rule>
+     <rule>
+      <repositoryKey>xml</repositoryKey>
+      <key>Disconnected_Shapes</key>
+      <type>CODE_SMELL</type>
+      <priority>MAJOR</priority>
+      <name>Boomi - Components shapes are disconnected</name>
+      <templateKey>XPathCheck</templateKey>
+      <description>One or more shapes are found that are disconnected</description>
+      <parameters>
+        <parameter>
+          <key>filePattern</key>
+          <value>**/**.xml</value>
+        </parameter>
+        <parameter>
+          <key>expression</key>
+          <value>/bns:Component/bns:object/process/shapes/shape/dragpoints/dragpoint[@toShape='unset']</value>
+        </parameter>
+        <parameter>
+          <key>message</key>
+          <value>There shall not be disconnected shapes in the Boomi Process design.</value>
+        </parameter>
+      </parameters>
+    </rule>
   </rules>
 </profile>
