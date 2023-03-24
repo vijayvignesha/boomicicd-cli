@@ -119,12 +119,24 @@ then
         export ATOM_HOME="${installDir}/Gateway_${atomName}"
 fi
 
+echo "export ATOM_HOME=\'$ATOM_HOME\'" >> /home/$serviceUserName/.profile
+echo "export BOOMI_CONTAINERNAME=\'$atomName\'" >> /home/$serviceUserName/.profile
+
 # install Boomi only if the atom binaries are not installed
 if [[ ! -f ${ATOM_HOME}/bin/atom ]]
 then
-        source bin/installBoomi.sh
+	molecule="molecule_0"
+        echo "export ATOM_LOCALHOSTID=$molecule" >> /home/$serviceUserName/.profile
+	source /home/$serviceUserName/.profile
+	source bin/installBoomi.sh
 else
 	echo "Atom is already installed at $ATOM_HOME, will install only the start up service"	
+	molecule=$(ls -1 "${ATOM_HOME}"/bin/views/node*dat | tail -1 | sed -e 's/^.*node\.//' -e 's/\.dat//')
+	molecule=${molecule/molecule_/}  # remove the underscore character
+	molecule=$((molecule+1))
+	molecule="molecule_${molecule}"
+        echo "export ATOM_LOCALHOSTID=$molecule" >> /home/$serviceUserName/.profile
+	source /home/$serviceUserName/.profile
 fi
 
-sudo bin/installBoomiService.sh atomName=${atomName} atomHome=${ATOM_HOME} serviceUserName=${serviceUserName} mountPoint="${mountPoint}"
+sudo bin/installBoomiService.sh atomName="${atomName}" atomHome="${ATOM_HOME}" serviceUserName=${serviceUserName} mountPoint="${mountPoint}"

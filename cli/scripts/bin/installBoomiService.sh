@@ -4,8 +4,8 @@ source bin/common.sh
 ARGUMENTS=(atomName serviceUserName atomHome mountPoint)
 authToken="BOOMI_TOKEN."
 inputs "$@"
-echo "create $atomName.service ..."
-cat <<EOF >/etc/systemd/system/$atomName.service
+echo "create atom.service ..."
+cat <<EOF >/etc/systemd/system/atom.service
 [Unit]
 Description= Boomi $atomName
 After=network.target
@@ -33,10 +33,10 @@ EOF
 chmod -R 0600 /etc/jmxremote
 chown -R $serviceUserName:$serviceUserName /etc/jmxremote/jmxremote.*
 
-echo "setup $atomName.service ..."
-systemctl enable $atomName
-systemctl start $atomName
-systemctl is-active --quiet $atomName && echo Service is running
+echo "setup atom.service ..."
+systemctl enable atom
+systemctl start atom
+systemctl is-active --quiet atom && echo Service is running
 
 
 
