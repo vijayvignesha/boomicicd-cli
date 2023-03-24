@@ -138,5 +138,5 @@ else
         echo "export ATOM_LOCALHOSTID=$molecule" >> /home/$serviceUserName/.profile
 	source /home/$serviceUserName/.profile
 fi
-
+ln -sf ${ATOM_HOME}/bin/atom /usr/local/bin/atom
 sudo bin/installBoomiService.sh atomName="${atomName}" atomHome="${ATOM_HOME}" serviceUserName=${serviceUserName} mountPoint="${mountPoint}"
