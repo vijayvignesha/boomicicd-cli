@@ -7,16 +7,18 @@ inputs "$@"
 echo "create atom.service ..."
 cat <<EOF >/etc/systemd/system/atom.service
 [Unit]
-Description= Boomi $atomName
+Description=Boomi $atomName
 After=network.target
 RequiresMountsFor="${mountPoint}"
 [Service]
-Type=forking
 User=$serviceUserName
+WorkingDirectory=/home/${serviceUserName}
+PassEnvironment=JAVA_HOME
+ExecStart="/home/${serviceUserName}/start-atom.sh"
+ExecStop="/home/${serviceUserName}/stop-atom.sh"
+Type=forking
+TimeoutStartSec=600
 Restart=always
-ExecStart="${atomHome}/bin/atom" start
-ExecStop="${atomHome}/bin/atom" stop
-ExecReload="${atomHome}/bin/atom" restart
 [Install]
 WantedBy=multi-user.target
 EOF

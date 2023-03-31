@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 source /home/boomi/.profile
 restart_log="restart${ATOM_LOCALHOSTID}.log"
 

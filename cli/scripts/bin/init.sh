@@ -119,8 +119,8 @@ then
         export ATOM_HOME="${installDir}/Gateway_${atomName}"
 fi
 
-echo "export ATOM_HOME=\'$ATOM_HOME\'" >> /home/$serviceUserName/.profile
-echo "export BOOMI_CONTAINERNAME=\'$atomName\'" >> /home/$serviceUserName/.profile
+echo "export ATOM_HOME='$ATOM_HOME'" >> /home/$serviceUserName/.profile
+echo "export BOOMI_CONTAINERNAME='$atomName'" >> /home/$serviceUserName/.profile
 
 # install Boomi only if the atom binaries are not installed
 if [[ ! -f ${ATOM_HOME}/bin/atom ]]
@@ -139,4 +139,5 @@ else
 	source /home/$serviceUserName/.profile
 fi
 ln -sf ${ATOM_HOME}/bin/atom /usr/local/bin/atom
+cp -f /home/$serviceUserName/restart.sh ${ATOM_HOME}/bin
 sudo bin/installBoomiService.sh atomName="${atomName}" atomHome="${ATOM_HOME}" serviceUserName=${serviceUserName} mountPoint="${mountPoint}"
