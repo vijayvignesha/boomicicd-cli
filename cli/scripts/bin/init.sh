@@ -121,22 +121,33 @@ fi
 
 echo "export ATOM_HOME='$ATOM_HOME'" >> /home/$serviceUserName/.profile
 echo "export BOOMI_CONTAINERNAME='$atomName'" >> /home/$serviceUserName/.profile
+views_i=0
+while [ $views_i -lt 10 ]
+do
+        viewfile_count=$(find -f $ATOM_HOME/bin/views/*molecule_$i* 2> /dev/null | wc -l)
+        if [ ${viewfile_count} -eq 0 ];  then
+                ATOM_LOCALHOSTID=molecule_$i;
+                break;
+        else
+                views_i=$((views_i + 1))
+        fi
+done
 
+if [ "$atomType" = "ATOM" ];
+then
+	echo "export ATOM_LOCALHOSTID="atom" >> /home/$serviceUserName/.profile
+else
+	echo "export ATOM_LOCALHOSTID=${ATOM_LOCALHOSTID}" >> /home/$serviceUserName/.profile
+fi
+
+
+source /home/$serviceUserName/.profile
 # install Boomi only if the atom binaries are not installed
 if [[ ! -f ${ATOM_HOME}/bin/atom ]]
 then
-	node="node_0"
-        echo "export ATOM_LOCALHOSTID=$node" >> /home/$serviceUserName/.profile
-	source /home/$serviceUserName/.profile
 	source bin/installBoomi.sh
 else
 	echo "Atom is already installed at $ATOM_HOME, will install only the start up service"	
-	node=$(ls -1 "${ATOM_HOME}"/bin/views/node*dat | tail -1 | sed -e 's/^.*node\.//' -e 's/\.dat//')
-	node=${node/node_/}  # remove the underscore character
-	node=$((node+1))
-	node="node_${node}"
-        echo "export ATOM_LOCALHOSTID=$node" >> /home/$serviceUserName/.profile
-	source /home/$serviceUserName/.profile
 fi
 ln -sf ${ATOM_HOME}/bin/atom /usr/local/bin/atom
 cp -f /home/$serviceUserName/restart.sh ${ATOM_HOME}/bin
