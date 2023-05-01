@@ -135,7 +135,7 @@ done
 
 if [ "$atomType" = "ATOM" ];
 then
-	echo "export ATOM_LOCALHOSTID="atom" >> /home/$serviceUserName/.profile
+	echo "export ATOM_LOCALHOSTID=atom" >> /home/$serviceUserName/.profile
 else
 	echo "export ATOM_LOCALHOSTID=${ATOM_LOCALHOSTID}" >> /home/$serviceUserName/.profile
 fi
