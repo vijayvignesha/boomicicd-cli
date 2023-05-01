@@ -18,7 +18,12 @@ if [[ "$atomType" = "ATOM" ]]
 			
 		source bin/installerToken.sh atomType=${atomType}
 		./bin/installAtom.sh atomName="${atomName}" tokenId="${tokenId}" INSTALL_DIR="${INSTALL_DIR}" JRE_HOME="${JRE_HOME}" JAVA_HOME="${JAVA_HOME}" proxyHost="${proxyHost}" proxyPort="${proxyPort}" proxyUser="${proxyUser}" proxyPassword="${proxyPassword}"
-		source bin/createEnvAndAttachRoleAndAtom.sh env="${env}" classification=${classification} atomName="${atomName}" roleNames="${roleNames}" purgeHistoryDays="${purgeHistoryDays}" forceRestartTime="${forceRestartMin}"
+		if [ ! -z "${env}" ]; 
+		then
+			source bin/createEnvAndAttachRoleAndAtom.sh env="${env}" classification=${classification} atomName="${atomName}" roleNames="${roleNames}" purgeHistoryDays="${purgeHistoryDays}" forceRestartTime="${forceRestartMin}"
+		else
+			source bin/updateAtom.sh atomId=${atomId} purgeHistoryDays="${purgeHistoryDays}" forceRestartTime=${forceRestartTime}
+		fi
 		source bin/updateSharedServer.sh atomName="${atomName}" overrideUrl=true url="${sharedWebURL}" apiType="${apiType}" auth="${apiAuth}"
 		input="conf/atom_container.properties"
 
@@ -70,7 +75,12 @@ if [[ "$atomType" = "ATOM" ]]
 
 		source bin/installerToken.sh atomType=${atomType}
 		./bin/installMolecule.sh atomName="${atomName}" tokenId="${tokenId}" INSTALL_DIR="${INSTALL_DIR}" WORK_DIR="${WORK_DIR}" TMP_DIR="${TMP_DIR}" JRE_HOME="${JRE_HOME}" JAVA_HOME="${JAVA_HOME}" proxyHost="${proxyHost}" proxyPort="${proxyPort}" proxyUser="${proxyUser}" proxyPassword="${proxyPassword}"
-		source bin/createEnvAndAttachRoleAndAtom.sh env="${env}" classification=${classification} atomName="${atomName}" roleNames="${roleNames}" purgeHistoryDays="${purgeHistoryDays}" forceRestartTime="${forceRestartMin}"
+		if [ ! -z "${env}" ]; 
+		then
+			source bin/createEnvAndAttachRoleAndAtom.sh env="${env}" classification=${classification} atomName="${atomName}" roleNames="${roleNames}" purgeHistoryDays="${purgeHistoryDays}" forceRestartTime="${forceRestartMin}"
+		else
+			source bin/updateAtom.sh atomId=${atomId} purgeHistoryDays="${purgeHistoryDays}" forceRestartTime=${forceRestartTime}
+		fi
 		source bin/updateSharedServer.sh atomName="${atomName}" overrideUrl=true url="${sharedWebURL}" apiType="${apiType}" auth="${apiAuth}"
 		input="conf/molecule_container.properties"
 	else
