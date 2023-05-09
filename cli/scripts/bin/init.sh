@@ -5,7 +5,7 @@ source bin/common.sh
 # mandatory arguments
 unset atomType ATOM_HOME
 ARGUMENTS=(atomName accountId classification)
-OPT_ARGUMENTS=(proxyHost proxyPort proxyUser proxyPassword installDir workDir tmpDir javaHome jreHome atomType purgeHistoryDays roleNames forceRestartMin maxMem apiType apiAuth sharedWebURL serviceUserName mountPoint env)
+OPT_ARGUMENTS=(proxyHost proxyPort proxyUser proxyPassword installDir workDir tmpDir javaHome jreHome atomType purgeHistoryDays roleNames forceRestartMin maxMem apiType apiAuth sharedWebURL serviceUserName mountPoint env client group)
 
 inputs "$@"
 
@@ -103,6 +103,21 @@ then
        return 255;
 fi
 
+if [ ! -z "${client}" ]
+then
+	echo "export client='$client'" >> /home/$serviceUserName/.profile
+fi
+
+if [ ! -z "${group}" ]
+then
+	echo "export group='$group'" >> /home/$serviceUserName/.profile
+fi
+
+if [ ! -z "${env}" ]
+then
+	echo "export environment='$env'" >> /home/$serviceUserName/.profile
+fi
+
 atomName="$(echo "${atomName}" | sed -e 's/-/_/g')"
 
 if [ "$atomType" = "ATOM" ];
@@ -136,8 +151,10 @@ done
 if [ "$atomType" = "ATOM" ];
 then
 	echo "export ATOM_LOCALHOSTID=atom" >> /home/$serviceUserName/.profile
+	echo "export pod_name=atom" >> /home/$serviceUserName/.profile
 else
 	echo "export ATOM_LOCALHOSTID=${ATOM_LOCALHOSTID}" >> /home/$serviceUserName/.profile
+	echo "export pod_name=${ATOM_LOCALHOSTID}" >> /home/$serviceUserName/.profile
 fi
 
 
