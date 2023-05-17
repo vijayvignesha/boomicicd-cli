@@ -99,6 +99,7 @@ The followings script/ calls a single API. Arguments in *italics* are optional
 |dynamicScriptJobBuilder.sh|file|Muliple|Multiple|Sames as above directly reads a JSON configuration file (*\*.conf* extension) and calls cli scripts based the pipeline template. The templates are defined in the templates/configurations folder|
 |deployProcess.sh|processId, envId, componentType, notes|deployProcess.json|Deployment/|Deploys a process to an env (Legacy Deployment)|
 |executeProcess.sh|	atomName, atomType, componentId or *processName*| executeProcess.json|executeProcess| Executes a process on a named Boomi runtime|
+|init.sh|atomType, atomName, classification, env|-|Installs Boomi atom and molecule, creates environment|
 |installerToken.sh|atomType, *cloudId*|installerToken.json|InstallerToken|Gets an installer token atomType must be one-of **ATOM**, **MOLECULE** or **CLOUD**. If atomType=CLOUD then the cloudId must be specified|
 |promoteProcess.sh|from, to, processName, current, version, listenerStatus|Muliple|Multiple|Promotes a process of a given version from an Env to another Env (Legacy deployment)|
 |queryAtom.sh|atomName, atomType, atomStatus|queryAtom.json|Atom/query|Queries Atom use atomType and atomStatus =* for wild card|
