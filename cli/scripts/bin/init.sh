@@ -68,7 +68,7 @@ then
    export forceRestartMin=10	
 fi
 
-if [ -z "${maxMex}" ]
+if [ -z "${maxMem}" ]
 then
      export maxMem=4g 
 fi
