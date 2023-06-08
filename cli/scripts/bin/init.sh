@@ -136,15 +136,15 @@ fi
 
 echo "export ATOM_HOME='$ATOM_HOME'" >> /home/$serviceUserName/.profile
 echo "export BOOMI_CONTAINERNAME='$atomName'" >> /home/$serviceUserName/.profile
-views_i=0
-while [ $views_i -lt 10 ]
+i=0
+while [ $i -lt 10 ]
 do
         viewfile_count=$(find -f $ATOM_HOME/bin/views/*molecule_$i* 2> /dev/null | wc -l)
         if [ ${viewfile_count} -eq 0 ];  then
                 ATOM_LOCALHOSTID=molecule_$i;
                 break;
         else
-                views_i=$((views_i + 1))
+                i=$((i + 1))
         fi
 done
 
