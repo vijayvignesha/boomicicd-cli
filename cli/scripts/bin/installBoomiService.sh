@@ -35,6 +35,16 @@ EOF
 chmod -R 0600 /etc/jmxremote
 chown -R $serviceUserName:$serviceUserName /etc/jmxremote/jmxremote.*
 
+# Check if atom is already running
+if pgrep -f "atom" > /dev/null
+then
+    # stop atom process if already running to avoid any conflicts with systemctl managed process
+    echo "stop atom process aready running..."
+    atom stop
+else
+    echo "Stopped"
+fi
+
 echo "setup atom.service ..."
 systemctl enable atom
 systemctl start atom
