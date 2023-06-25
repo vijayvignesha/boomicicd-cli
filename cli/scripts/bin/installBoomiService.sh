@@ -45,10 +45,10 @@ else
     echo "Stopped"
 fi
 
-echo "setup atom.service ..."
-systemctl enable atom
-systemctl start atom
-systemctl is-active --quiet atom && echo Service is running
+# echo "setup atom.service ..."
+# systemctl enable atom
+# systemctl start atom
+# systemctl is-active --quiet atom && echo Service is running
 
 
 
