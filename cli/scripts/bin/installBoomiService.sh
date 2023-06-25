@@ -41,6 +41,9 @@ then
     # stop atom process if already running to avoid any conflicts with systemctl managed process
     echo "stopping atom process already running..."
     atom stop
+    pwd
+    whoami
+    atom status
 else
     echo "Stopped"
 fi
