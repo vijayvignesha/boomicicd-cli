@@ -173,6 +173,7 @@ cp -f /home/$serviceUserName/restart.sh ${ATOM_HOME}/bin
 if pgrep -f "atom" > /dev/null
 then
     # stop atom process if already running to avoid any conflicts with systemctl managed process
+    atom status
     echo "stopping atom process already running..."
     atom stop
     pwd
@@ -181,4 +182,4 @@ then
 else
     echo "Stopped"
 fi
-sudo bin/installBoomiService.sh atomName="${atomName}" atomHome="${ATOM_HOME}" serviceUserName=${serviceUserName} mountPoint="${mountPoint}"
+#sudo bin/installBoomiService.sh atomName="${atomName}" atomHome="${ATOM_HOME}" serviceUserName=${serviceUserName} mountPoint="${mountPoint}"

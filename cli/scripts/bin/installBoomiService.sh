@@ -53,7 +53,3 @@ chown -R $serviceUserName:$serviceUserName /etc/jmxremote/jmxremote.*
 # systemctl start atom
 # systemctl is-active --quiet atom && echo Service is running
 
-echo "debug atom"
-atom status
-
-
