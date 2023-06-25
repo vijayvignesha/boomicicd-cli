@@ -169,4 +169,16 @@ else
 fi
 ln -sf ${ATOM_HOME}/bin/atom /usr/local/bin/atom
 cp -f /home/$serviceUserName/restart.sh ${ATOM_HOME}/bin
+# Check if atom is already running
+if pgrep -f "atom" > /dev/null
+then
+    # stop atom process if already running to avoid any conflicts with systemctl managed process
+    echo "stopping atom process already running..."
+    atom stop
+    pwd
+    echo "whoami:$(whoami)"
+    atom status
+else
+    echo "Stopped"
+fi
 sudo bin/installBoomiService.sh atomName="${atomName}" atomHome="${ATOM_HOME}" serviceUserName=${serviceUserName} mountPoint="${mountPoint}"
