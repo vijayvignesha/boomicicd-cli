@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source bin/common.sh
-echo "whoami:${whoami}"
+echo "whoami:$whoami"
 # get atom id of the by atom name
 # mandatory arguments
 unset atomType ATOM_HOME
