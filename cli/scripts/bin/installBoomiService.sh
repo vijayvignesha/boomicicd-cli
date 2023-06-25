@@ -42,7 +42,7 @@ then
     echo "stopping atom process already running..."
     atom stop
     pwd
-    whoami
+    echo "whoami:${whoami}"
     atom status
 else
     echo "Stopped"
