@@ -39,7 +39,7 @@ chown -R $serviceUserName:$serviceUserName /etc/jmxremote/jmxremote.*
 if pgrep -f "atom" > /dev/null
 then
     # stop atom process if already running to avoid any conflicts with systemctl managed process
-    echo "stop atom process aready running..."
+    echo "stop atom process already running..."
     atom stop
 else
     echo "Stopped"
