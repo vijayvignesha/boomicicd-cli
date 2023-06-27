@@ -111,7 +111,6 @@ EOF
 
 
 # update container properties
-while IFS= read -r line; do echo "$line" >> ${ATOM_HOME}/conf/container.properties; done  < "$input"
-
+#while IFS= read -r line; do echo "$line" >> ${ATOM_HOME}/conf/container.properties; done  < "$input"
 	
-${ATOM_HOME}/bin/atom start
+#${ATOM_HOME}/bin/atom start
