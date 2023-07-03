@@ -1,7 +1,6 @@
 #!/bin/bash
 
 source bin/common.sh
-echo "whoami:$(whoami)"
 # get atom id of the by atom name
 # mandatory arguments
 unset atomType ATOM_HOME
@@ -140,7 +139,7 @@ echo "export BOOMI_CONTAINERNAME='$atomName'" >> /home/$serviceUserName/.profile
 i=0
 while [ $i -lt 10 ]
 do
-        viewfile_count=$(find -f $ATOM_HOME/bin/views/*molecule_$i* 2> /dev/null | wc -l)
+        viewfile_count=$(ls $ATOM_HOME/bin/views/*molecule_$i* 2> /dev/null | wc -l)
         if [ ${viewfile_count} -eq 0 ];  then
                 ATOM_LOCALHOSTID=molecule_$i;
                 break;
@@ -169,17 +168,4 @@ else
 fi
 ln -sf ${ATOM_HOME}/bin/atom /usr/local/bin/atom
 cp -f /home/$serviceUserName/restart.sh ${ATOM_HOME}/bin
-# Check if atom is already running
-if pgrep -f "atom" > /dev/null
-then
-    # stop atom process if already running to avoid any conflicts with systemctl managed process
-    atom status
-    echo "stopping atom process already running..."
-    atom stop
-    pwd
-    echo "whoami:$(whoami)"
-    atom status
-else
-    echo "Stopped"
-fi
 sudo bin/installBoomiService.sh atomName="${atomName}" atomHome="${ATOM_HOME}" serviceUserName=${serviceUserName} mountPoint="${mountPoint}"
