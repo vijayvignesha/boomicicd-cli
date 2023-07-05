@@ -40,6 +40,7 @@ if [ "${platform}" = "aws" ]; then
 	echo "${efsMount}.efs.${defaultAWSRegion}.amazonaws.com:/ $mountPoint nfs4 defaults,_netdev 0 0" | sudo tee -a /etc/fstab
 else
 	# GCP/Azure platforms
+	echo "mounting ${efsMount}..."
 	echo "${efsMount}:$mountPoint $mountPoint nfs4 defaults,_netdev 0 0" | sudo tee -a /etc/fstab
 fi
 sudo mount -a
