@@ -5,7 +5,7 @@
 
 source bin/common.sh
 #Query Process Schedule Status  by atomId and processId
-ARGUMENTS=(atomName atomType)
+ARGUMENTS=(atomName)
 OPT_ARGUMENTS=(processName componentId)
 
 inputs "$@"
@@ -14,7 +14,7 @@ then
         return 255;
 fi
 
-source bin/queryAtom.sh atomName="$atomName" atomStatus=online atomType=$atomType
+source bin/queryAtom.sh atomName="$atomName" 
 
 if [ -z "${componentId}" ] || [ null == "${componentId}" ]
 then
