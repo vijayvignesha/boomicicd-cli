@@ -88,7 +88,7 @@ do
 			i=$(( $i + 1 )); 
   		done
 		extract queryToken queryToken 
-		URL=$baseURL/ExecutionSummaryRecord/queryMore
+		URL=$baseURL/ExecutionRecord/queryMore
 	done
 done
 printReportTail
