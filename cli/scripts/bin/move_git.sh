@@ -21,7 +21,7 @@ if [ -z "$source_branch" ] || [ -z "$target_branch" ] || [ -z "$file" ]; then
 fi
 
 # Step 1: Get the SHA of the file's blob on the source branch
-SHA_BLOB=$(curl -s -v -H "Authorization: Bearer $GITHUB_TOKEN" \
+SHA_BLOB=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
 "$GITHUB_API_URL/contents/$file?ref=$source_branch" | jq -r .sha)
 
 if [ "$SHA_BLOB" == "null" ]; then
@@ -33,19 +33,19 @@ fi
 FILE_CONTENT=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
 "$GITHUB_API_URL/git/blobs/$SHA_BLOB" | jq -r .content | base64 --decode)
 
-echoi "$FILE_CONTENT"
+FILE_BYTES_CONTENT=$(echo -n "$FILE_CONTENT" | base64 | tr -d '\n\r')
 
 # Step 3: Create a new blob in the target branch with the file content
 NEW_BLOB_SHA=$(curl -s -X POST -H "Authorization: Bearer $GITHUB_TOKEN" \
 -H "Content-Type: application/json" \
--d "{\"content\": \"$(echo -n "$FILE_CONTENT" | base64)\", \"encoding\": \"base64\"}" \
+-d "{\"content\": \"$FILE_BYTES_CONTENT\", \"encoding\": \"base64\"}" \
 "$GITHUB_API_URL/git/blobs" | jq -r .sha)
 
 # Step 4: Get the latest commit SHA of the target branch
 LATEST_COMMIT_SHA=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
 "$GITHUB_API_URL/git/refs/heads/$target_branch" | jq -r .object.sha)
 
-echoi "LATEST_COMMITS_SHA=$LATEST_COMMIT_SHA::NEW_BLOB_SHA=$NEW_BLOB_SHA"
+# echoi "LATEST_COMMITS_SHA=$LATEST_COMMIT_SHA::NEW_BLOB_SHA=$NEW_BLOB_SHA"
 
 # Step 5: Get the tree SHA of the latest commit
 TREE_SHA=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
@@ -57,7 +57,7 @@ NEW_TREE_SHA=$(curl -s -X POST -H "Authorization: Bearer $GITHUB_TOKEN" \
 -d "{\"base_tree\": \"$TREE_SHA\", \"tree\": [{\"path\": \"$file\", \"mode\": \"100644\", \"type\": \"blob\", \"sha\": \"$NEW_BLOB_SHA\"}]}" \
 "$GITHUB_API_URL/git/trees" | jq -r .sha)
 
-echoi "TRESS_SHA=$TREE_SHA::NEW_TREE_SHA=$NEW_TREE_SHA"
+# echoi "TRESS_SHA=$TREE_SHA::NEW_TREE_SHA=$NEW_TREE_SHA"
 
 # Step 7: Create a new commit with the new tree object
 NEW_COMMIT_SHA=$(curl -s -X POST -H "Authorization: Bearer $GITHUB_TOKEN" \
@@ -66,10 +66,14 @@ NEW_COMMIT_SHA=$(curl -s -X POST -H "Authorization: Bearer $GITHUB_TOKEN" \
 "$GITHUB_API_URL/git/commits" | jq -r .sha)
 
 # Step 8: Update the target branch to point to the new commit
-curl -s -X PATCH -H "Authorization: Bearer $GITHUB_TOKEN" \
+COMMIT_SHA=$(curl -s -X PATCH -H "Authorization: Bearer $GITHUB_TOKEN" \
 -H "Content-Type: application/json" \
 -d "{\"sha\": \"$NEW_COMMIT_SHA\"}" \
-"$GITHUB_API_URL/git/refs/heads/$target_branch"
+"$GITHUB_API_URL/git/refs/heads/$target_branch" | jq -r .object.sha)
 
-echo "File moved successfully from $source_branch to $target_branch."
+if [ "$COMMIT_SHA" == "null" ]; then
+  echo "Error: File does not exist on the source branch or invalid source branch."
+  return 255;
+fi
 
+echoi "File $file moved successfully from $source_branch to $target_branch commit id $COMMIT_SHA."
