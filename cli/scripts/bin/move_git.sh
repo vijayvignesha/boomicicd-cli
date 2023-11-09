@@ -3,7 +3,7 @@
 # Usage:
 # ./bin/move_git.sh source_branch="source_branch_name" target_branch="target_branch_name" file="path/to/your/file"
 source bin/common.sh 
-export authToken="BOOMI_TOKEN.user@email.com:token"
+export authToken="BOOMI_TOKEN.user@email.com:Bearer"
 ARGUMENTS=(source_branch target_branch file)
 inputs "$@"
 
@@ -30,37 +30,43 @@ if [ "$SHA_BLOB" == "null" ]; then
 fi
 
 # Step 2: Get the content of the file
-FILE_CONTENT=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+FILE_CONTENT=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
 "$GITHUB_API_URL/git/blobs/$SHA_BLOB" | jq -r .content | base64 --decode)
 
+echoi "$FILE_CONTENT"
+
 # Step 3: Create a new blob in the target branch with the file content
-NEW_BLOB_SHA=$(curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
+NEW_BLOB_SHA=$(curl -s -X POST -H "Authorization: Bearer $GITHUB_TOKEN" \
 -H "Content-Type: application/json" \
 -d "{\"content\": \"$(echo -n "$FILE_CONTENT" | base64)\", \"encoding\": \"base64\"}" \
 "$GITHUB_API_URL/git/blobs" | jq -r .sha)
 
 # Step 4: Get the latest commit SHA of the target branch
-LATEST_COMMIT_SHA=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+LATEST_COMMIT_SHA=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
 "$GITHUB_API_URL/git/refs/heads/$target_branch" | jq -r .object.sha)
 
+echoi "LATEST_COMMITS_SHA=$LATEST_COMMIT_SHA::NEW_BLOB_SHA=$NEW_BLOB_SHA"
+
 # Step 5: Get the tree SHA of the latest commit
-TREE_SHA=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+TREE_SHA=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
 "$GITHUB_API_URL/git/commits/$LATEST_COMMIT_SHA" | jq -r .tree.sha)
 
 # Step 6: Create a new tree with the new blob
-NEW_TREE_SHA=$(curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
+NEW_TREE_SHA=$(curl -s -X POST -H "Authorization: Bearer $GITHUB_TOKEN" \
 -H "Content-Type: application/json" \
 -d "{\"base_tree\": \"$TREE_SHA\", \"tree\": [{\"path\": \"$file\", \"mode\": \"100644\", \"type\": \"blob\", \"sha\": \"$NEW_BLOB_SHA\"}]}" \
 "$GITHUB_API_URL/git/trees" | jq -r .sha)
 
+echoi "TRESS_SHA=$TREE_SHA::NEW_TREE_SHA=$NEW_TREE_SHA"
+
 # Step 7: Create a new commit with the new tree object
-NEW_COMMIT_SHA=$(curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
+NEW_COMMIT_SHA=$(curl -s -X POST -H "Authorization: Bearer $GITHUB_TOKEN" \
 -H "Content-Type: application/json" \
 -d "{\"parents\": [\"$LATEST_COMMIT_SHA\"], \"tree\": \"$NEW_TREE_SHA\", \"message\": \"Move file $file from $source_branch to $target_branch\"}" \
 "$GITHUB_API_URL/git/commits" | jq -r .sha)
 
 # Step 8: Update the target branch to point to the new commit
-curl -s -X PATCH -H "Authorization: token $GITHUB_TOKEN" \
+curl -s -X PATCH -H "Authorization: Bearer $GITHUB_TOKEN" \
 -H "Content-Type: application/json" \
 -d "{\"sha\": \"$NEW_COMMIT_SHA\"}" \
 "$GITHUB_API_URL/git/refs/heads/$target_branch"
