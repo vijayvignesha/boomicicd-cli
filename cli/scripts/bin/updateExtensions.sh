@@ -1,10 +1,9 @@
 #!/bin/bash
-
+set +x
 source bin/common.sh
 # get atom id of the by atom name
 # mandatory arguments
-ARGUMENTS=(extensionJson)
-OPT_ARGUMENTS=(envId env)
+OPT_ARGUMENTS=(envId env extensionJsonBase64 extensionJson)
 
 
 inputs "$@"
@@ -22,6 +21,16 @@ elif [ ! -z "${env}" ]
 		source bin/queryEnvironment.sh env=${env} type="*" classification="*"
 else
 		envId=$(echo "$extensionJson" | jq -r .environmentId)
+fi
+
+if [ -z "${extensionJson}" ] && [ -z "${extensionJsonBase64}" ]
+then
+	return 255
+fi
+
+if [ ! -z "${extensionJsonBase64}" ] 
+then
+	extensionJson=$( echo "${extensionJsonBase64}" | base64 --decode ) 
 fi
 
 partial=$(echo "$extensionJson" | jq -r .partial)
@@ -48,7 +57,7 @@ while IFS= read -r line
         then
                 valueText=$(echo "$line" | sed -e 's/\"//g' -e 's/,//g' -e 's/^.*:\s\+//' -e 's/\s+.*$//g')
                 # Since in AZURE all variables are upper case I need to do this trick.
-                getValueFrom "${valueText^^}"
+                getValueFrom "${valueText}"
                 extensionValue="$(<<< "$extensionValue" sed -e 's`[\\/.*^$&`\\]`\\&`g')"
                 echov "Replacing variable $valueText with $extensionValue in $line"
                 echo "$line" | sed -e "s/$valueText/$extensionValue/" -e "s/valueFrom/value/" >> "${JSON_FILE}"

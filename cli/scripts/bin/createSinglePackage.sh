@@ -84,7 +84,7 @@ then
 		if [ $type == "process" ] 
 		then
 			componentFile="${WORKSPACE}"/${componentIds[$g]}.xml
-			# source bin/createExtensionsJson.sh componentFile="${componentFile}"
+			source bin/createExtensionsJson.sh componentFile="${componentFile}"
 		fi
  
     mv "${WORKSPACE}"/${componentIds[$g]}.xml "${packageFolder}/${folderFullPath}" 

@@ -42,8 +42,9 @@ inputs "$@"
 #GIT_COMMIT=$3
 #JENKINS_CALLBACK_URL=$4
 #JOB_BASE_NAME=$5
-JOB_CONTEXT="${JOB_BASE_NAME// /_}"
-BUILD_NUMBER=echo "${JENKINS_CALLBACK_URL}" | sed -E 's/^.*\/(.*)\/console/\1/'
+BUILD_NUMBER=$(echo "${JENKINS_CALLBACK_URL}" | sed -E 's/^.*\/(.*)\/console/\1/')
+JOB_CONTEXT="${JOB_BASE_NAME// /_}_${BUILD_NUMBER}"
+BUILD_NUMBER=$(echo "${JENKINS_CALLBACK_URL}" | sed -E 's/^.*\/(.*)\/console/\1/')
 #state=$6
 if [ ! -z "${GIT_COMMIT}" ] && [ ! -z "${GIT_API_URL}" ]
  then
