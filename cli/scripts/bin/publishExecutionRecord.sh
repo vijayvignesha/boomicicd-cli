@@ -43,7 +43,7 @@ fi
 
 h=0;
 REPORT_TITLE="Summary of process executions between $from and $to."
-REPORT_HEADERS=("#" "Atom Name" "Process Name" "Execution Type" "Execution Time" "Execution ID" "Duration(s)" "Status" "Message")
+REPORT_HEADERS=("#" "Atom Name" "Process Name" "Execution Type" "Execution Time" "NodeID" "Execution ID" "Duration(s)" "Status" "Message")
 printReportHead
 
 IFS=',' ; for _atomName in $(echo "$atomNames");
@@ -74,6 +74,7 @@ do
 		i=0;
   		extractMap processName processNames	
   		extractMap atomName    atomNames	
+  		extractMap nodeId    nodes	
   		extractMap executionDuration[1] durations	
 		extractMap status statuses
 		extractMap message messages
@@ -84,7 +85,7 @@ do
 		do 
 			h=$(( $h + 1 ))
 			time=${durations[$i]};
-			printReportRow  "${h}" "${atomNames[$i]}" "${processNames[$i]}" "${types[$i]}" "${times[$i]}" "${eIds[$i]}" "$((time / 1000))" "${statuses[$i]}" "${messages[$i]}"
+			printReportRow  "${h}" "${atomNames[$i]}" "${processNames[$i]}" "${types[$i]}" "${times[$i]}" "${nodes[$i]}" "${eIds[$i]}" "$((time / 1000))" "${statuses[$i]}" "${messages[$i]}"
 			i=$(( $i + 1 )); 
   		done
 		extract queryToken queryToken 
