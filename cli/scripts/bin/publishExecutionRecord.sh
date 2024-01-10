@@ -43,7 +43,7 @@ fi
 
 h=0;
 REPORT_TITLE="Summary of process executions between $from and $to."
-REPORT_HEADERS=("#" "Atom Name" "Process Name" "Execution Type" "Execution Time" "NodeID" "Execution ID" "Docs In" "Docs Out" "Duration(s)" "Status" "Message")
+REPORT_HEADERS=("#" "Atom Name" "Process Name" "Execution Type" "Execution Time" "NodeID" "Execution ID" "Docs In" "Docs Out" "Docs In Size" "Docs Out Size" "Duration(s)" "Status" "Message")
 printReportHead
 
 IFS=',' ; for _atomName in $(echo "$atomNames");
@@ -83,11 +83,13 @@ do
 		extractMap executionType types
 		extractMap inboundDocumentCount in_docs 
 		extractMap outboundDocumentCount out_docs 
+		extractMap inboundDocumentSize[1] in_size 
+		extractMap outboundDocumentSize[1] out_size 
 		while [ "$i" -lt "${#durations[@]}" ];
 		do 
 			h=$(( $h + 1 ))
 			time=${durations[$i]};
-			printReportRow  "${h}" "${atomNames[$i]}" "${processNames[$i]}" "${types[$i]}" "${times[$i]}" "${nodes[$i]}" "${eIds[$i]}" "${in_docs[$i]}" "${out_docs[$i]}" "$((time / 1000))" "${statuses[$i]}" "${messages[$i]}"
+			printReportRow  "${h}" "${atomNames[$i]}" "${processNames[$i]}" "${types[$i]}" "${times[$i]}" "${nodes[$i]}" "${eIds[$i]}" "${in_docs[$i]}" "${out_docs[$i]}" "${in_size[$i]}" "${out_size[$i]}" "$((time / 1000))" "${statuses[$i]}" "${messages[$i]}"
 			i=$(( $i + 1 )); 
   		done
 		extract queryToken queryToken 
