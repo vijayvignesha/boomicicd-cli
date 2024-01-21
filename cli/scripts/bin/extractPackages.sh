@@ -48,6 +48,7 @@ else
  	done   
 fi  
 
+find "$saveExtractComponentXmlFolder" -type f -name "*.xml" -exec sed -i 's/bns://g' {} \;
 
 clean
 
