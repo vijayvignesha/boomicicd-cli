@@ -9,3 +9,4 @@ exports.sh
 *_Extensions.json
 *install64.sh
 *.html
+.DS_Store
