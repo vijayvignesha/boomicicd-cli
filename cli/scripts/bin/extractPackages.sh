@@ -34,7 +34,7 @@ then
     processName=`echo "${processName}" | xargs`
     saveProcessName="${processName}"
 		componentType="${saveComponentType}"
-		source bin/createSinglePackage.sh processName="${processName}" componentType="${componentType}" packageVersion="${packageVersion}" notes="${notes}" extractComponentXmlFolder="${extractComponentXmlFolder}"  componentVersion=""
+		source bin/createSinglePackageLite.sh processName="${processName}" componentType="${componentType}" packageVersion="${packageVersion}" notes="${notes}" extractComponentXmlFolder="${extractComponentXmlFolder}"  componentVersion=""
  	done   
 else    
 	IFS=',' ;for componentId in `echo "${componentIds}"`; 
@@ -48,7 +48,7 @@ else
  	done   
 fi  
 
-find "$saveExtractComponentXmlFolder" -type f -name "*.xml" -exec sed -i 's/bns://g' {} \;
+find "${WORKSPACE}/$saveExtractComponentXmlFolder" -type f -name "*.xml" -exec sed -i 's/bns://g' {} \;
 
 clean
 
