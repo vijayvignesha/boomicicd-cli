@@ -1,0 +1,67 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+# How do I allow non-mandatory params
+# How do I pass params from external input
+parameters:
+- name: source_branch
+  displayName: 'Source Branch Name'
+  type: string
+  default: 'azure-pipelines'
+- name: target_branch
+  displayName: 'Target Branch Name'
+  type: string
+  default: 'dev'
+- name: file
+  displayName: 'File Path'
+  type: string
+  default: 'azure-pipelines.yml'
+
+
+variables:
+- group: boomicicd
+
+# need a new image with SonarRunner and xmllint (libxml2-utils) and jq
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+- script: |
+    # Don't have to do this if the image comes preloaded with this package
+    sudo apt-get install -y libxml2-utils
+    sudo apt-get install -y dos2unix
+    cd cli/scripts
+    dos2unix ./bin/move_azure.sh
+    dos2unix ./bin/common.sh
+    # This set the variables used in Azure DevOps pipeline.
+    # Mostly constants
+    export h1="$(h1)"
+    export h2="$(h2)"
+    export WORKSPACE=$(pwd)
+
+    # Get values from user or parameter store
+    # The following credentials can be stored in parameter store and retrieved dynamically
+    # Example to retrieve form an AWS store "$(aws ssm get-parameter --region xx --with-decryption --output text --query Parameter.Value --name /Parameter.name)
+    export accountName="$(accountName)"
+    export accountId=$(accountId)
+    export authToken=$(authToken)
+    export gitComponentRepoURL="$(gitComponentRepoURL)"
+    export gitComponentUserName="$(gitComponentUserName)"
+    export gitComponentUserEmail="$(gitComponentUserEmail)"
+    export sonarHostURL="$(sonarHostURL)"
+    export sonarHostToken="$(sonarHostToken)"
+    export sonarProjectKey="$(sonarProjectKey)"
+    export gitComponentRepoName="$(gitComponentRepoName)" # Top level folder of the GIT REPO
+    export gitComponentCommitPath="$(gitComponentCommitPath)" # export gitComponentCommitPath="?version=GBmaster&path=" this is used in code review report
+    export sonarRulesFile="$(sonarRulesFile)"
+    export AZURE_DEVOPS_PAT="$(AZURE_DEVOPS_PAT)"
+    export ORGANIZATION="$(ORGANIZATION)"
+    export PROJECT="$(PROJECT)"
+    chmod +x bin/common.sh 
+    chmod +x bin/move_azure.sh
+    ./bin/move_azure.sh source_branch="${{ parameters.source_branch }}" target_branch="${{ parameters.target_branch }}" file="${{ parameters.file }}"
+  
+  displayName: 'Move Azure file CI/CD'
