@@ -1,9 +1,10 @@
 #!/bin/bash
-set +x
+
 source bin/common.sh
 # get atom id of the by atom name
 # mandatory arguments
-OPT_ARGUMENTS=(envId env extensionJsonBase64 extensionJson)
+ARGUMENTS=(extensionJson)
+OPT_ARGUMENTS=(envId env)
 
 
 inputs "$@"
@@ -21,16 +22,6 @@ elif [ ! -z "${env}" ]
 		source bin/queryEnvironment.sh env=${env} type="*" classification="*"
 else
 		envId=$(echo "$extensionJson" | jq -r .environmentId)
-fi
-
-if [ -z "${extensionJson}" ] && [ -z "${extensionJsonBase64}" ]
-then
-	return 255
-fi
-
-if [ ! -z "${extensionJsonBase64}" ] 
-then
-	extensionJson=$( echo "${extensionJsonBase64}" | base64 --decode ) 
 fi
 
 partial=$(echo "$extensionJson" | jq -r .partial)
@@ -66,10 +57,17 @@ while IFS= read -r line
         fi
  done < "$TMP_JSON_FILE"
 cat "${JSON_FILE}"
+exportVariable=updateExtensionsResponseId
 URL=$baseURL/EnvironmentExtensions/${envId}/update
  
 callAPI
- 
+
+if [ -z "$updateExtensionsResponseId" ]
+then
+   echoe "Environment update failed aborting mission"	
+   return 255;
+fi
+
 clean
 
 if [ "$ERROR" -gt "0" ]
