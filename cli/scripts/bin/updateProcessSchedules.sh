@@ -22,24 +22,45 @@ if [ "$?" -gt "0" ]
 then
         return 255;
 fi
-
+exportVariable=scheduleResponseId
 # Get componentId from processName
 if [ -z "${componentId}" ] || [ null == "${componentId}" ]
 then
+  saveProcessName="$processName"
   source bin/queryProcess.sh processName="$processName"
+fi
+saveComponentId="${componentId}"
+
+if [ -z "$saveComponentId" ]
+then
+  echoe "Could not find componentId aborting misson"
+  return 255;
 fi
 
 source bin/queryProcessScheduleStatus.sh atomName="$atomName" atomType=$atomType componentId=${componentId} 
-
 saveScheduleId=scheduleId
+
+
+if [ -z "$saveScheduleId" ]
+then
+  echoe "Could not find schedule for component ${saveComponentId} aborting misson"
+  return 255;
+fi
+
 
 ARGUMENTS=(atomId processId scheduleId years months daysOfMonth daysOfWeek hours minutes)
 JSON_FILE=json/updateProcessSchedules.json
 URL=$baseURL/ProcessSchedules/$scheduleId/update
  
 createJSON
-unset exportVariable
 callAPI
+
+if [ -z "$scheduleResponseId" ]
+then
+  echoe "Could not create schedule for component ${saveComponentId} aborting misson"
+  return 255;
+fi
+
 
 clean
 export scheduleId=${saveScheduleId}
