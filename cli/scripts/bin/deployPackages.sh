@@ -33,28 +33,50 @@ then
 	do 
 		notes="${saveNotes}"
 		deployNotes="${saveNotes}"
-    packageVersion="${savePackageVersion}"
-    processName=`echo "${processName}" | xargs`
-    saveProcessName="${processName}"
+    	packageVersion="${savePackageVersion}"
+    	processName=`echo "${processName}" | xargs`
+    	saveProcessName="${processName}"
 		listenerStatus="${saveListenerStatus}"
 		componentType="${saveComponentType}"
 		envId=${saveEnvId}
 		source bin/createSinglePackage.sh processName="${processName}" componentType="${componentType}" packageVersion="${packageVersion}" notes="${notes}" extractComponentXmlFolder="${extractComponentXmlFolder}" componentVersion=""
+		if [ -z "$packageId" ]
+		then
+				echoe "Create package component for ${saveProcessName} is not successful aborting mission."
+		   		return 255;
+		fi
 		source bin/createDeployedPackage.sh envId=${envId} listenerStatus="${listenerStatus}" packageId=$packageId notes="${deployNotes}"
+
+		if [ -z "$deploymentId" ]
+		then
+				echoe "Deplay package component for ${saveProcessName} is not successful aborting mission."
+		   		return 255;
+		fi
  	done   
 else    
 	IFS=',' ;for componentId in `echo "${componentIds}"`; 
 	do 
 		notes="${saveNotes}"
 		deployNotes="${saveNotes}"
-   	packageVersion="${savePackageVersion}"
-    componentId=`echo "${componentId}" | xargs`
-    saveComponentId="${componentId}"
+   		packageVersion="${savePackageVersion}"
+    	componentId=`echo "${componentId}" | xargs`
+    	saveComponentId="${componentId}"
 		componentType="${saveComponentType}"
 		listenerStatus="${saveListenerStatus}"
 		envId=${saveEnvId}
 		source bin/createSinglePackage.sh componentId=${componentId} componentType="${componentType}" packageVersion="${packageVersion}" notes="${notes}" extractComponentXmlFolder="${extractComponentXmlFolder}" componentVersion=""
+		if [ -z "$packageId" ]
+		then
+				echoe "Create package component for ${saveComponentId} is not successful aborting mission."
+		   		return 255;
+		fi
+
 		source bin/createDeployedPackage.sh envId=${envId} listenerStatus="${listenerStatus}" packageId=$packageId notes="${deployNotes}"
+		if [ -z "$deploymentId" ]
+		then
+				echoe "Deplay package component for ${saveComponentId} is not successful aborting mission."
+		   		return 255;
+		fi
  	done   
 fi  
 
