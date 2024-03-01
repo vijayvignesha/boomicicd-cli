@@ -29,22 +29,32 @@ if [ -z "${componentIds}" ]
 then
 	IFS=',' ;for processName in `echo "${processNames}"`; 
 	do 
-		notes="${saveNotes}"
+	notes="${saveNotes}"
     packageVersion="${savePackageVersion}"
     processName=`echo "${processName}" | xargs`
     saveProcessName="${processName}"
-		componentType="${saveComponentType}"
-		source bin/createSinglePackage.sh processName="${processName}" componentType="${componentType}" packageVersion="${packageVersion}" notes="${notes}" extractComponentXmlFolder="${extractComponentXmlFolder}"  componentVersion=""
+	componentType="${saveComponentType}"
+	source bin/createSinglePackage.sh processName="${processName}" componentType="${componentType}" packageVersion="${packageVersion}" notes="${notes}" extractComponentXmlFolder="${extractComponentXmlFolder}"  componentVersion=""
+	if [ -z "$packageId" ]
+	then
+		echoe "Create package component for ${saveProcessName} is not successful aborting mission."
+	 	exit 255;
+	fi
  	done   
 else    
 	IFS=',' ;for componentId in `echo "${componentIds}"`; 
 	do 
-		notes="${saveNotes}"
+	notes="${saveNotes}"
    	packageVersion="${savePackageVersion}"
     componentId=`echo "${componentId}" | xargs`
     saveComponentId="${componentId}"
-		componentType="${saveComponentType}"
-		source bin/createSinglePackage.sh componentId=${componentId} componentType="${componentType}" packageVersion="${packageVersion}" notes="${notes}" extractComponentXmlFolder="${extractComponentXmlFolder}"  componentVersion=""
+	componentType="${saveComponentType}"
+	source bin/createSinglePackage.sh componentId=${componentId} componentType="${componentType}" packageVersion="${packageVersion}" notes="${notes}" extractComponentXmlFolder="${extractComponentXmlFolder}"  componentVersion=""
+	if [ -z "$packageId" ]
+	then
+		echoe "Create package component for ${saveComponentId} is not successful aborting mission."
+		exit 255;
+	fi	
  	done   
 fi  
 
