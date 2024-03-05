@@ -34,7 +34,7 @@ saveComponentId="${componentId}"
 if [ -z "$saveComponentId" ]
 then
   echoe "Could not find componentId aborting misson"
-  exit 255;
+  return 255;
 fi
 
 source bin/queryProcessScheduleStatus.sh atomName="$atomName" atomType=$atomType componentId=${componentId} 
@@ -44,7 +44,7 @@ saveScheduleId=scheduleId
 if [ -z "$saveScheduleId" ]
 then
   echoe "Could not find schedule for component ${saveComponentId} aborting misson"
-  exit 255;
+  return 255;
 fi
 
 
@@ -58,7 +58,7 @@ callAPI
 if [ -z "$scheduleResponseId" ]
 then
   echoe "Could not create schedule for component ${saveComponentId} aborting misson"
-  exit 255;
+  return 255;
 fi
 
 
