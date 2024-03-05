@@ -38,7 +38,7 @@ then
 	if [ -z "$packageId" ]
 	then
 		echoe "Create package component for ${saveProcessName} is not successful aborting mission."
-	 	exit 255;
+	 	return 255;
 	fi
  	done   
 else    
@@ -53,7 +53,7 @@ else
 	if [ -z "$packageId" ]
 	then
 		echoe "Create package component for ${saveComponentId} is not successful aborting mission."
-		exit 255;
+		return 255;
 	fi	
  	done   
 fi  
