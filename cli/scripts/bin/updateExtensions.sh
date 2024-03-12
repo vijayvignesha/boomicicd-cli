@@ -16,10 +16,10 @@ fi
 
 if [ ! -z "${envId}" ]
 then
-	envId=${envId}
+	envId=${envId};
 elif [ ! -z "${env}" ]
 	then
-	source bin/queryEnvironment.sh env=${env} type="*" classification="*"
+	        source bin/queryEnvironment.sh env=${env} type="*" classification="*"
 else
 	envId=$(echo "$extensionJson" | jq -r .environmentId)
 fi
@@ -33,7 +33,7 @@ then
 fi
 
 
-echov "The env id is ${envId}"
+echo "The env id is ${envId}"
 
 TMP_JSON_FILE="${WORKSPACE}"/tmpExtension.json
 JSON_FILE="${WORKSPACE}"/tmp.json
