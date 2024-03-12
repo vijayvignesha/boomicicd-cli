@@ -19,7 +19,7 @@ then
 		envId=${envId}
 elif [ ! -z "${env}" ]
 	then
-		source bin/queryEnvironment.sh env=${env} type="*" classification="*"
+	source bin/queryEnvironment.sh env=${env} type="*" classification="*"
 else
 	envId=$(echo "$extensionJson" | jq -r .environmentId)
 fi
