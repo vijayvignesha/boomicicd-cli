@@ -58,7 +58,7 @@ while IFS= read -r line
  done < "$TMP_JSON_FILE"
 cat "${JSON_FILE}"
 exportVariable=updateExtensionsResponseId
-URL=$baseURL/EnvironmentExtensions/${envId}/update"
+URL=$baseURL/EnvironmentExtensions/${envId}/update
  
 callAPI
 
