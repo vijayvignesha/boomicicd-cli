@@ -143,9 +143,8 @@ function callAPI {
   cat "${WORKSPACE}/out.json"
    if [ ! -z "$exportVariable" ]
    then
-     echovv "Id is $id"
-  	 export temp=`jq -r .$id "${WORKSPACE}"/out.json`
-		 echovv "export ${exportVariable}=${temp}."
+  	 export ${exportVariable}=`jq -r .$id "${WORKSPACE}"/out.json`
+		 echovv "export ${exportVariable}=${!exportVariable}."
    fi
   else
    curl -s -X POST -u $authToken -H "${h1}" -H "${h2}" $URL -d${queryToken} > "${WORKSPACE}"/out.json
