@@ -125,6 +125,7 @@ function callAPI {
   if [[ $URL != *queryMore* ]]
   then
    curl -s -X POST -u $authToken -H "${h1}" -H "${h2}" $URL -d@"${WORKSPACE}"/tmp.json > "${WORKSPACE}"/out.json
+   echo "curl -s -X POST -H \"${h1}\" -H \"${h2}\" $URL -d@\"${WORKSPACE}\"/tmp.json > \"${WORKSPACE}\"/out.json"
    export ERROR=$(jq  -r . "${WORKSPACE}"/out.json 2>&1 > /dev/null)
    if [[ ! -z $ERROR ]]; then 
 	   export ERROR_MESSAGE=`cat "${WORKSPACE}"/out.json` 
@@ -138,7 +139,8 @@ function callAPI {
 	   echoee "$ERROR_MESSAGE"
 	   return 251
    fi
- 
+  cat "${WORKSPACE}/tmp.json"
+  cat "${WORKSPACE}/out.json"
    if [ ! -z "$exportVariable" ]
    then
   	 export ${exportVariable}=`jq -r .$id "${WORKSPACE}"/out.json`
