@@ -47,7 +47,7 @@ then
   exit 255;
 fi
 
-
+exportVariable=id
 ARGUMENTS=(atomId processId scheduleId years months daysOfMonth daysOfWeek hours minutes)
 JSON_FILE=json/updateProcessSchedules.json
 URL=$baseURL/ProcessSchedules/$scheduleId/update
@@ -55,7 +55,7 @@ URL=$baseURL/ProcessSchedules/$scheduleId/update
 createJSON
 callAPI
 
-if [ -z "$scheduleResponseId" ]
+if [ -z "$id" ]
 then
   echoe "Could not create schedule for component ${saveComponentId} aborting misson"
   exit 255;
