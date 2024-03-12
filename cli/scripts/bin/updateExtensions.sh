@@ -16,7 +16,7 @@ fi
 
 if [ ! -z "${envId}" ]
 then
-		envId=${envId}
+	envId=${envId}
 elif [ ! -z "${env}" ]
 	then
 	source bin/queryEnvironment.sh env=${env} type="*" classification="*"
