@@ -20,7 +20,7 @@ ARGUMENTS=(atomId processId)
 JSON_FILE=json/queryProcessSchedules.json
 URL=$baseURL/ProcessSchedules/query
 id=result[0].id
-exportVariable=scheduleId
+exportVariable=id
 
 createJSON
 
