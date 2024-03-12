@@ -16,12 +16,12 @@ fi
 
 if [ ! -z "${envId}" ]
 then
-	envId=${envId};
+	        envId=${envId}
 elif [ ! -z "${env}" ]
-	then
+        then
 	        source bin/queryEnvironment.sh env=${env} type="*" classification="*"
 else
-	envId=$(echo "$extensionJson" | jq -r .environmentId)
+	        envId=$(echo "$extensionJson" | jq -r .environmentId)
 fi
 
 partial=$(echo "$extensionJson" | jq -r .partial)
@@ -33,7 +33,7 @@ then
 fi
 
 
-echo "The env id is ${envId}"
+echov "The env id is ${envId}"
 
 TMP_JSON_FILE="${WORKSPACE}"/tmpExtension.json
 JSON_FILE="${WORKSPACE}"/tmp.json
@@ -58,7 +58,7 @@ while IFS= read -r line
  done < "$TMP_JSON_FILE"
 cat "${JSON_FILE}"
 exportVariable=updateExtensionsResponseId
-URL="${baseURL}/EnvironmentExtensions/${envId}/update"
+URL=$baseURL/EnvironmentExtensions/${envId}/update"
  
 callAPI
 
