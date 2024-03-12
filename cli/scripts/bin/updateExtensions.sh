@@ -65,7 +65,7 @@ callAPI
 if [ -z "$updateExtensionsResponseId" ]
 then
    echoe "Environment update failed aborting mission"	
-   exit 255;
+   return 255;
 fi
 
 clean
