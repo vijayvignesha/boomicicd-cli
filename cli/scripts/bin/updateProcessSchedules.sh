@@ -22,7 +22,7 @@ if [ "$?" -gt "0" ]
 then
         return 255;
 fi
-exportVariable=scheduleResponseId
+exportVariable=id
 # Get componentId from processName
 if [ -z "${componentId}" ] || [ null == "${componentId}" ]
 then
