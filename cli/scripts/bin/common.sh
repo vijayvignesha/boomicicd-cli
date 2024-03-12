@@ -144,7 +144,7 @@ function callAPI {
    if [ ! -z "$exportVariable" ]
    then
      echovv "Id is $id"
-  	 export temp=`jq -r .$exportVariable "${WORKSPACE}"/out.json`
+  	 export temp=`jq -r .$id "${WORKSPACE}"/out.json`
 		 echovv "export ${exportVariable}=${temp}."
    fi
   else
