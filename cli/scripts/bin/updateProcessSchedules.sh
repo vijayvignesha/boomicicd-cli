@@ -38,7 +38,7 @@ then
 fi
 
 source bin/queryProcessScheduleStatus.sh atomName="$atomName" atomType=$atomType componentId=${componentId} 
-saveScheduleId=scheduleId
+saveScheduleId=$scheduleId
 
 
 if [ -z "$saveScheduleId" ]
