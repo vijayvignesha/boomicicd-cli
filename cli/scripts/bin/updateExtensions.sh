@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source bin/common.sh
+
 # get atom id of the by atom name
 # mandatory arguments
 ARGUMENTS=(extensionJson)
@@ -35,10 +36,10 @@ fi
 
 echov "The env id is ${envId}"
 
-TMP_JSON_FILE="${WORKSPACE}"/tmpExtension.json
-JSON_FILE="${WORKSPACE}"/tmp.json
+TMP_JSON_FILE="${WORKSPACE}/tmpExtension.json"
+JSON_FILE="${WORKSPACE}/tmp.json"
 
-echo $extensionJson | jq --arg envId $envId '.environmentId=$envId' | jq --arg envId $envId '.id=$envId' > "$TMP_JSON_FILE"
+echo "$extensionJson" | jq --arg envId "$envId" '.environmentId=$envId' | jq --arg envId "$envId" '.id=$envId' > "$TMP_JSON_FILE"
 echo "" > "${JSON_FILE}"
 
 
@@ -58,20 +59,20 @@ while IFS= read -r line
  done < "$TMP_JSON_FILE"
 cat "${JSON_FILE}"
 exportVariable=updateExtensionsResponseId
-URL=$baseURL/EnvironmentExtensions/${envId}/update
- 
+URL="$baseURL/EnvironmentExtensions/${envId}/update"
+
 callAPI
 
 if [ -z "$updateExtensionsResponseId" ]
 then
-   echoe "Environment update failed aborting mission"	
-   exit 255
+   echoe "Environment update failed aborting mission"
+        exit 255
 fi
 
 clean
 
 if [ "$ERROR" -gt "0" ]
 then
-   echoe "${ERROR_MESSAGE}"	
-   return 255;
+   echoe "${ERROR_MESSAGE}"
+        return 255;
 fi
