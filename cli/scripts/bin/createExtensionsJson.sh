@@ -120,7 +120,7 @@ if [ ! -z "${f_addConnection}" ] || [ ! -z "${f_addProperty}" ]  || [ ! -z "${f_
  then 
 	export extensionJson="$(echo ${json} | jq . )"
 fi
-echoi "Extensions are $extensionJson"
+echov "Extensions are $extensionJson"
 
 unset json j_ppv ppv
  
