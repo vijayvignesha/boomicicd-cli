@@ -57,15 +57,16 @@ while IFS= read -r line
         fi
  done < "$TMP_JSON_FILE"
 cat "${JSON_FILE}"
-exportVariable=id
+id=id
+exportVariable=extensionsId
 URL=$baseURL/EnvironmentExtensions/${envId}/update
 
 callAPI
 
-if [ -z "$id" ]
+if [ -z "$extensionsId" ]
 then
    echoe "Environment update failed aborting mission"
-        exit 255;
+   exit 255;
 fi
 
 clean
